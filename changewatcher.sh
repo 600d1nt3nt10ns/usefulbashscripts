@@ -14,11 +14,15 @@ if [ -f "$1" ] || [ -d "$1" ]; then
                 exit 1
         fi
         echo "Monitoring $1 started at $(date +%Y%m%d%H%M%S)"
+                PREVIOUS_EVENT=""
                 inotifywait -m -r -e modify --exclude <some_file> "$1" | while read -r FILE
                 do
-                        #echo "A change event has been detected in $FILE at $(date +%Y%m%d%H%M%S)"
-                        echo "A change event has been detected in $FILE at $(date +%Y%m%d%H%M%S)" | sendmail root
-        done
+                        if [ "$FILE" != "$PREVIOUS_EVENT" ]; then
+                            #echo "A change event has been detected in $FILE at $(date +%Y%m%d%H%M%S)"
+                            echo "A change event has been detected in $FILE at $(date +%Y%m%d%H%M%S)" | sendmail root
+                            PREVIOUS_EVENT="$FILE"
+                        fi
+                done
 else
         echo "File or directory $1 not found."
         exit 1
