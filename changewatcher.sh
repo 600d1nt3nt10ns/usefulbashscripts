@@ -14,7 +14,7 @@ if [ -f "$1" ] || [ -d "$1" ]; then
                 exit 1;
         fi
         echo "Monitoring $1 started at $(date +%Y%m%d%H%M%S)"
-                inotifywait -m -r -e modify "$1" | while read -r FILE
+                inotifywait -m -r -e modify --exclude <some_file> "$1" | while read -r FILE
                 do
                         #echo "A change event has been detected in $FILE at $(date +%Y%m%d%H%M%S)"
                         echo "A change event has been detected in $FILE at $(date +%Y%m%d%H%M%S)" | sendmail root
