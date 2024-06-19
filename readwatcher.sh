@@ -1,5 +1,5 @@
 #!/bin/bash
-# Monitor file $1 for changes
+# Monitor file for changes
 # usage: readwatcher.sh (file)
 if [ -z "$1" ]; then
         echo "Usage: readwatcher.sh (file)"
@@ -9,9 +9,9 @@ fi
 if [ -f "$1" ] || [ -d "$1" ]; then
         # Checking if this file or directory is being monitored.
         if [ "$(ps aux | grep inotifywait | grep -c "$1")" -gt "0" ]; then
-                echo "The file or directory is being monitored already: ";
-                ps aux | grep inotifywait | grep "$1";
-                exit 1;
+                echo "The file or directory is being monitored already: "
+                ps aux | grep inotifywait | grep "$1"
+                exit 1
         fi
         echo "Monitoring $1 started at $(date +%Y%m%d%H%M%S)"
                 inotifywait -m -r -e access "$1" | while read -r FILE
